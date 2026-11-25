@@ -2,209 +2,399 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Chelavie Panel</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#10111a;color:#eee;font-family:Arial,sans-serif;padding:20px}
-.container{max-width:850px;margin:45px auto}
-.card{background:#1b1c29;border:1px solid #303144;border-radius:16px;padding:24px;margin-bottom:18px}
-h1{color:#c7a5ff;margin:0 0 8px}
-.sub{color:#999;font-size:14px}
-input{width:100%;padding:14px;border-radius:9px;border:1px solid #414258;background:#11121c;color:white;margin:9px 0 15px}
-button{padding:12px 17px;border:0;border-radius:9px;background:#9362db;color:white;font-weight:bold;cursor:pointer}
-button:hover{opacity:.85}
-.danger{background:#b74761}
-.secondary{background:#35364a}
-.row{display:flex;gap:10px;align-items:center}
-.row input{flex:1;min-width:0}
-.stats{font-size:30px;font-weight:bold;color:#c7a5ff}
-.item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid #303144}
-.item span{overflow-wrap:anywhere}
-.hidden{display:none}
-#message{color:#c7a5ff;margin:12px 0}
-@media(max-width:480px){body{padding:12px}.container{margin:20px auto}.card{padding:17px}.item{align-items:flex-start}.item button{padding:9px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Database Chelavie</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #ffffff;
+      color: #292929;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 35px auto;
+    }
+
+    h1 {
+      color: #d93652;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-top: 0;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      margin: 8px 0 14px;
+      border: 1px solid #ddd;
+      border-radius: 9px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #d93652;
+    }
+
+    button {
+      border: none;
+      background: #d93652;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #bd2943;
+    }
+
+    .secondary {
+      background: #555;
+    }
+
+    .delete {
+      background: #e74c3c;
+      padding: 8px 12px;
+    }
+
+    .stats {
+      background: #fff5f6;
+      border: 1px solid #f5d4da;
+      padding: 18px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stats strong {
+      display: block;
+      font-size: 30px;
+      color: #d93652;
+      margin-top: 8px;
+    }
+
+    .number-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #eee;
+      padding: 13px 0;
+      overflow-wrap: anywhere;
+    }
+
+    .number-item:last-child {
+      border-bottom: none;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .message {
+      margin-top: 12px;
+      font-size: 14px;
+      color: #d93652;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .muted {
+      color: #888;
+      font-size: 13px;
+    }
+  </style>
 </head>
+
 <body>
-<div class="container">
+  <div class="container">
 
-<div class="card">
-<h1>✦ Chelavie Panel</h1>
-<div class="sub">Access Control Management</div>
-</div>
+    <h1>Database Chelavie</h1>
+    <p class="subtitle">WhatsApp Number Database</p>
 
-<div id="login" class="card">
-<h2>Admin Login</h2>
-<form id="loginForm">
-<label>Email</label>
-<input id="email" type="email" placeholder="Email admin" required>
-<label>Password</label>
-<input id="password" type="password" placeholder="Password" required>
-<button type="submit">Login</button>
-</form>
-<div id="loginMessage"></div>
-</div>
+    <!-- LOGIN -->
+    <div class="card" id="loginCard">
+      <h2>Login Admin</h2>
 
-<div id="dashboard" class="hidden">
-<div class="card">
-<div class="row" style="justify-content:space-between">
-<h2>Dashboard</h2>
-<button id="logout" class="secondary">Logout</button>
-</div>
-<div class="sub">Total nomor whitelist</div>
-<div class="stats" id="total">0</div>
-</div>
+      <input
+        type="email"
+        id="email"
+        placeholder="Email admin"
+      >
 
-<div class="card">
-<h3>Tambah Nomor</h3>
-<form id="addForm">
-<input id="phone" placeholder="Contoh: 6281234567890" required>
-<button type="submit">+ Tambah Nomor</button>
-</form>
-<div id="addMessage"></div>
-</div>
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+      >
 
-<div class="card">
-<h3>Daftar Whitelist</h3>
-<input id="search" placeholder="Cari nomor...">
-<div id="numbers">Memuat data...</div>
-</div>
-</div>
-</div>
+      <button onclick="login()">Login</button>
+      <p class="message" id="loginMessage"></p>
+    </div>
 
-<script>
-const SUPABASE_URL = "https://djouuqmfqgazvvhbmwda.supabase.co";
-const SUPABASE_KEY = "sb_publishable_lcIlTOGg38UiWqCmLPW7Ig_HpgQJD_d";
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="hidden">
 
-const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+      <div class="topbar">
+        <h2>Dashboard</h2>
+        <button class="secondary" onclick="logout()">Logout</button>
+      </div>
 
-const loginBox=document.getElementById("login");
-const dashboard=document.getElementById("dashboard");
-const numbersBox=document.getElementById("numbers");
-const totalBox=document.getElementById("total");
+      <div class="card stats">
+        Total Nomor Whitelist
+        <strong id="total">0</strong>
+      </div>
 
-function message(id,text){
- document.getElementById(id).textContent=text;
-}
+      <!-- TAMBAH NOMOR -->
+      <div class="card">
+        <h2>Tambah Nomor</h2>
 
-function showDashboard(show){
- loginBox.classList.toggle("hidden",show);
- dashboard.classList.toggle("hidden",!show);
-}
+        <input
+          type="text"
+          id="phone"
+          placeholder="Contoh: 628123456789"
+        >
 
-async function loadNumbers(){
- numbersBox.textContent="Memuat data...";
- const {data,error}=await db.from("whitelist_numbers")
- .select("id,phone,created_at").order("created_at",{ascending:false});
+        <button onclick="addNumber()">Tambah Nomor</button>
+        <p class="message" id="addMessage"></p>
+      </div>
 
- if(error){
-  numbersBox.textContent="Gagal memuat: "+error.message;
-  return;
- }
+      <!-- DAFTAR NOMOR -->
+      <div class="card">
+        <h2>Daftar Whitelist</h2>
 
- totalBox.textContent=data.length;
- const query=document.getElementById("search").value.trim().toLowerCase();
- const filtered=data.filter(x=>x.phone.toLowerCase().includes(query));
+        <input
+          type="text"
+          id="search"
+          placeholder="Cari nomor..."
+          oninput="renderNumbers()"
+        >
 
- numbersBox.replaceChildren();
+        <div id="numberList"></div>
+        <p class="muted" id="listMessage"></p>
+      </div>
 
- if(!filtered.length){
-  numbersBox.textContent="Belum ada nomor.";
-  return;
- }
+    </div>
+  </div>
 
- filtered.forEach(item=>{
-  const row=document.createElement("div");
-  row.className="item";
+  <script>
+    // KONEKSI SUPABASE
+    const SUPABASE_URL =
+      "https://djouuqmfqgazvvhbmwda.supabase.co";
 
-  const phone=document.createElement("span");
-  phone.textContent=item.phone;
+    const SUPABASE_KEY =
+      "GANTI_DENGAN_PUBLISHABLE_KEY_MILIKMU";
 
-  const del=document.createElement("button");
-  del.className="danger";
-  del.textContent="Hapus";
-  del.onclick=()=>deleteNumber(item.id,item.phone);
+    const db = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
-  row.append(phone,del);
-  numbersBox.append(row);
- });
-}
+    let numbers = [];
 
-async function deleteNumber(id,phone){
- if(!confirm("Hapus nomor "+phone+"?"))return;
+    // LOGIN
+    async function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const message = document.getElementById("loginMessage");
 
- const {error}=await db.from("whitelist_numbers").delete().eq("id",id);
+      message.textContent = "Memproses login...";
 
- if(error){
-  alert("Gagal menghapus: "+error.message);
-  return;
- }
- loadNumbers();
-}
+      const { data, error } = await db.auth.signInWithPassword({
+        email,
+        password
+      });
 
-document.getElementById("loginForm").addEventListener("submit",async e=>{
- e.preventDefault();
- message("loginMessage","Memeriksa akun...");
+      if (error) {
+        message.textContent = "Login gagal: " + error.message;
+        return;
+      }
 
- const {error}=await db.auth.signInWithPassword({
-  email:document.getElementById("email").value,
-  password:document.getElementById("password").value
- });
+      showDashboard();
+    }
 
- if(error){
-  message("loginMessage","Login gagal: "+error.message);
- }else{
-  message("loginMessage","");
-  showDashboard(true);
-  loadNumbers();
- }
-});
+    // TAMPILKAN DASHBOARD
+    async function showDashboard() {
+      document.getElementById("loginCard").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
 
-document.getElementById("addForm").addEventListener("submit",async e=>{
- e.preventDefault();
+      await loadNumbers();
+    }
 
- const phone=document.getElementById("phone").value.replace(/\D/g,"");
+    // LOGOUT
+    async function logout() {
+      await db.auth.signOut();
 
- if(!/^\d{10,15}$/.test(phone)){
-  message("addMessage","Nomor harus berisi 10-15 digit.");
-  return;
- }
+      numbers = [];
 
- const {error}=await db.from("whitelist_numbers").insert({phone});
+      document.getElementById("dashboard").classList.add("hidden");
+      document.getElementById("loginCard").classList.remove("hidden");
+      document.getElementById("password").value = "";
+    }
 
- if(error){
-  message("addMessage","Gagal: "+error.message);
- }else{
-  message("addMessage","Nomor berhasil ditambahkan!");
-  document.getElementById("phone").value="";
-  loadNumbers();
- }
-});
+    // AMBIL DATA NOMOR
+    async function loadNumbers() {
+      const { data, error } = await db
+        .from("whitelist_numbers")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-document.getElementById("search").addEventListener("input",loadNumbers);
+      if (error) {
+        document.getElementById("listMessage").textContent =
+          "Gagal mengambil data: " + error.message;
+        return;
+      }
 
-document.getElementById("logout").addEventListener("click",async()=>{
- await db.auth.signOut();
- showDashboard(false);
-});
+      numbers = data || [];
 
-db.auth.getSession().then(({data})=>{
- if(data.session){
-  showDashboard(true);
-  loadNumbers();
- }
-});
+      document.getElementById("total").textContent =
+        numbers.length;
 
-db.auth.onAuthStateChange((event,session)=>{
- if(event==="SIGNED_OUT")showDashboard(false);
- if(event==="SIGNED_IN"){
-  showDashboard(true);
-  loadNumbers();
- }
-});
-</script>
+      renderNumbers();
+    }
+
+    // TAMBAH NOMOR
+    async function addNumber() {
+      const phoneInput = document.getElementById("phone");
+      const message = document.getElementById("addMessage");
+
+      const phone = phoneInput.value.trim();
+
+      if (!phone) {
+        message.textContent = "Masukkan nomor terlebih dahulu.";
+        return;
+      }
+
+      if (!/^\+?[0-9]{8,15}$/.test(phone)) {
+        message.textContent = "Format nomor tidak valid.";
+        return;
+      }
+
+      message.textContent = "Menyimpan nomor...";
+
+      const { error } = await db
+        .from("whitelist_numbers")
+        .insert([{ phone }]);
+
+      if (error) {
+        message.textContent =
+          error.code === "23505"
+            ? "Nomor sudah terdaftar."
+            : "Gagal menyimpan: " + error.message;
+        return;
+      }
+
+      phoneInput.value = "";
+      message.textContent = "Nomor berhasil ditambahkan.";
+
+      await loadNumbers();
+    }
+
+    // TAMPILKAN DAN CARI NOMOR
+    function renderNumbers() {
+      const list = document.getElementById("numberList");
+      const search = document.getElementById("search").value
+        .trim()
+        .toLowerCase();
+
+      const filtered = numbers.filter(item =>
+        item.phone.toLowerCase().includes(search)
+      );
+
+      list.innerHTML = "";
+
+      if (filtered.length === 0) {
+        list.innerHTML =
+          '<p class="muted">Nomor tidak ditemukan.</p>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "number-item";
+
+        const phone = document.createElement("span");
+        phone.textContent = item.phone;
+
+        const button = document.createElement("button");
+        button.className = "delete";
+        button.textContent = "Hapus";
+        button.onclick = () => deleteNumber(item.id);
+
+        div.appendChild(phone);
+        div.appendChild(button);
+        list.appendChild(div);
+      });
+    }
+
+    // HAPUS NOMOR
+    async function deleteNumber(id) {
+      const confirmDelete = confirm(
+        "Yakin ingin menghapus nomor ini?"
+      );
+
+      if (!confirmDelete) return;
+
+      const { error } = await db
+        .from("whitelist_numbers")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+        alert("Gagal menghapus: " + error.message);
+        return;
+      }
+
+      await loadNumbers();
+    }
+
+    // CEK SESI LOGIN SAAT HALAMAN DIBUKA
+    async function checkSession() {
+      const { data } = await db.auth.getSession();
+
+      if (data.session) {
+        showDashboard();
+      }
+    }
+
+    checkSession();
+  </script>
 </body>
 </html>
