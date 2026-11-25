@@ -30,12 +30,13 @@
       color: #d93652;
       text-align: center;
       margin-bottom: 8px;
+      font-size: 28px;
     }
 
     .subtitle {
       text-align: center;
       color: #888;
-      margin-bottom: 28px;
+      margin-bottom: 25px;
     }
 
     .card {
@@ -89,19 +90,51 @@
       padding: 8px 12px;
     }
 
+    .stats-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
     .stats {
       background: #fff5f6;
       border: 1px solid #f5d4da;
-      padding: 18px;
-      border-radius: 12px;
+      padding: 20px 14px;
+      border-radius: 14px;
       text-align: center;
     }
 
-    .stats strong {
+    .stats-title {
+      color: #777;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .stats-number {
       display: block;
       font-size: 30px;
+      font-weight: bold;
       color: #d93652;
-      margin-top: 8px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #16834a;
+      background: #e9f8ef;
+      padding: 8px 13px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #20b765;
+      border-radius: 50%;
     }
 
     .number-item {
@@ -140,261 +173,290 @@
       color: #888;
       font-size: 13px;
     }
+
+    @media (max-width: 400px) {
+      .stats {
+        padding: 16px 8px;
+      }
+
+      .stats-number {
+        font-size: 25px;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <div class="container">
 
-    <h1>Database Chelavie</h1>
-    <p class="subtitle">WhatsApp Number Database</p>
+<div class="container">
 
-    <!-- LOGIN -->
-    <div class="card" id="loginCard">
-      <h2>Login Admin</h2>
+  <h1>Database Chelavie</h1>
+  <p class="subtitle">WhatsApp Number Database</p>
 
-      <input
-        type="email"
-        id="email"
-        placeholder="Email admin"
-      >
+  <!-- LOGIN -->
+  <div class="card" id="loginCard">
+    <h2>Login Admin</h2>
 
-      <input
-        type="password"
-        id="password"
-        placeholder="Password"
-      >
+    <input
+      type="email"
+      id="email"
+      placeholder="Email admin"
+    >
 
-      <button onclick="login()">Login</button>
-      <p class="message" id="loginMessage"></p>
-    </div>
+    <input
+      type="password"
+      id="password"
+      placeholder="Password"
+    >
 
-    <!-- DASHBOARD -->
-    <div id="dashboard" class="hidden">
+    <button onclick="login()">Login</button>
 
-      <div class="topbar">
-        <h2>Dashboard</h2>
-        <button class="secondary" onclick="logout()">Logout</button>
-      </div>
-
-      <div class="card stats">
-        Total Nomor Whitelist
-        <strong id="total">0</strong>
-      </div>
-
-      <!-- TAMBAH NOMOR -->
-      <div class="card">
-        <h2>Tambah Nomor</h2>
-
-        <input
-          type="text"
-          id="phone"
-          placeholder="Contoh: 628123456789"
-        >
-
-        <button onclick="addNumber()">Tambah Nomor</button>
-        <p class="message" id="addMessage"></p>
-      </div>
-
-      <!-- DAFTAR NOMOR -->
-      <div class="card">
-        <h2>Daftar Whitelist</h2>
-
-        <input
-          type="text"
-          id="search"
-          placeholder="Cari nomor..."
-          oninput="renderNumbers()"
-        >
-
-        <div id="numberList"></div>
-        <p class="muted" id="listMessage"></p>
-      </div>
-
-    </div>
+    <p class="message" id="loginMessage"></p>
   </div>
 
-  <script>
-    // KONEKSI SUPABASE
-    const SUPABASE_URL =
-      "https://djouuqmfqgazvvhbmwda.supabase.co";
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="hidden">
 
-    const SUPABASE_KEY =
-      "GANTI_DENGAN_PUBLISHABLE_KEY_MILIKMU";
+    <!-- STATISTIK -->
+    <div class="stats-container">
 
-    const db = supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
+      <div class="stats">
+        <div class="stats-title">Total Nomor</div>
+        <span class="stats-number" id="total">0</span>
+      </div>
+
+      <div class="stats">
+        <div class="stats-title">Status</div>
+        <div class="status">
+          <span class="status-dot"></span>
+          AKTIF
+        </div>
+      </div>
+
+    </div>
+
+    <div class="topbar">
+      <h2>Dashboard</h2>
+      <button class="secondary" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- TAMBAH NOMOR -->
+    <div class="card">
+      <h2>Tambah Nomor</h2>
+
+      <input
+        type="text"
+        id="phone"
+        placeholder="Contoh: 628123456789"
+      >
+
+      <button onclick="addNumber()">Tambah Nomor</button>
+
+      <p class="message" id="addMessage"></p>
+    </div>
+
+    <!-- DAFTAR NOMOR -->
+    <div class="card">
+      <h2>Daftar Whitelist</h2>
+
+      <input
+        type="text"
+        id="search"
+        placeholder="Cari nomor..."
+        oninput="renderNumbers()"
+      >
+
+      <div id="numberList"></div>
+      <p class="muted" id="listMessage"></p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // SUPABASE
+  const SUPABASE_URL =
+    "https://djouuqmfqgazvvhbmwda.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_lcIlTOGg38UiWqCmLPW7Ig_HpgQJD_d";
+
+  const db = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  let numbers = [];
+
+  // LOGIN
+  async function login() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const message = document.getElementById("loginMessage");
+
+    message.textContent = "Memproses login...";
+
+    const { error } = await db.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      message.textContent = "Login gagal: " + error.message;
+      return;
+    }
+
+    showDashboard();
+  }
+
+  // DASHBOARD
+  async function showDashboard() {
+    document.getElementById("loginCard").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+
+    await loadNumbers();
+  }
+
+  // LOGOUT
+  async function logout() {
+    await db.auth.signOut();
+
+    numbers = [];
+
+    document.getElementById("dashboard").classList.add("hidden");
+    document.getElementById("loginCard").classList.remove("hidden");
+    document.getElementById("password").value = "";
+  }
+
+  // AMBIL DATA
+  async function loadNumbers() {
+    const { data, error } = await db
+      .from("whitelist_numbers")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      document.getElementById("listMessage").textContent =
+        "Gagal mengambil data: " + error.message;
+      return;
+    }
+
+    numbers = data || [];
+
+    document.getElementById("total").textContent =
+      numbers.length;
+
+    renderNumbers();
+  }
+
+  // TAMBAH NOMOR
+  async function addNumber() {
+    const phoneInput = document.getElementById("phone");
+    const message = document.getElementById("addMessage");
+
+    const phone = phoneInput.value.trim();
+
+    if (!phone) {
+      message.textContent = "Masukkan nomor terlebih dahulu.";
+      return;
+    }
+
+    if (!/^\+?[0-9]{8,15}$/.test(phone)) {
+      message.textContent = "Format nomor tidak valid.";
+      return;
+    }
+
+    message.textContent = "Menyimpan nomor...";
+
+    const { error } = await db
+      .from("whitelist_numbers")
+      .insert([{ phone }]);
+
+    if (error) {
+      message.textContent =
+        error.code === "23505"
+          ? "Nomor sudah terdaftar."
+          : "Gagal menyimpan: " + error.message;
+      return;
+    }
+
+    phoneInput.value = "";
+    message.textContent = "Nomor berhasil ditambahkan.";
+
+    await loadNumbers();
+  }
+
+  // TAMPILKAN NOMOR
+  function renderNumbers() {
+    const list = document.getElementById("numberList");
+
+    const search = document.getElementById("search").value
+      .trim()
+      .toLowerCase();
+
+    const filtered = numbers.filter(item =>
+      item.phone.toLowerCase().includes(search)
     );
 
-    let numbers = [];
+    list.innerHTML = "";
 
-    // LOGIN
-    async function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const message = document.getElementById("loginMessage");
+    if (filtered.length === 0) {
+      list.innerHTML =
+        '<p class="muted">Nomor tidak ditemukan.</p>';
+      return;
+    }
 
-      message.textContent = "Memproses login...";
+    filtered.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "number-item";
 
-      const { data, error } = await db.auth.signInWithPassword({
-        email,
-        password
-      });
+      const phone = document.createElement("span");
+      phone.textContent = item.phone;
 
-      if (error) {
-        message.textContent = "Login gagal: " + error.message;
-        return;
-      }
+      const button = document.createElement("button");
+      button.className = "delete";
+      button.textContent = "Hapus";
+      button.onclick = () => deleteNumber(item.id);
 
+      div.appendChild(phone);
+      div.appendChild(button);
+
+      list.appendChild(div);
+    });
+  }
+
+  // HAPUS NOMOR
+  async function deleteNumber(id) {
+    const confirmDelete = confirm(
+      "Yakin ingin menghapus nomor ini?"
+    );
+
+    if (!confirmDelete) return;
+
+    const { error } = await db
+      .from("whitelist_numbers")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      alert("Gagal menghapus: " + error.message);
+      return;
+    }
+
+    await loadNumbers();
+  }
+
+  // CEK LOGIN
+  async function checkSession() {
+    const { data } = await db.auth.getSession();
+
+    if (data.session) {
       showDashboard();
     }
+  }
 
-    // TAMPILKAN DASHBOARD
-    async function showDashboard() {
-      document.getElementById("loginCard").classList.add("hidden");
-      document.getElementById("dashboard").classList.remove("hidden");
+  checkSession();
+</script>
 
-      await loadNumbers();
-    }
-
-    // LOGOUT
-    async function logout() {
-      await db.auth.signOut();
-
-      numbers = [];
-
-      document.getElementById("dashboard").classList.add("hidden");
-      document.getElementById("loginCard").classList.remove("hidden");
-      document.getElementById("password").value = "";
-    }
-
-    // AMBIL DATA NOMOR
-    async function loadNumbers() {
-      const { data, error } = await db
-        .from("whitelist_numbers")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        document.getElementById("listMessage").textContent =
-          "Gagal mengambil data: " + error.message;
-        return;
-      }
-
-      numbers = data || [];
-
-      document.getElementById("total").textContent =
-        numbers.length;
-
-      renderNumbers();
-    }
-
-    // TAMBAH NOMOR
-    async function addNumber() {
-      const phoneInput = document.getElementById("phone");
-      const message = document.getElementById("addMessage");
-
-      const phone = phoneInput.value.trim();
-
-      if (!phone) {
-        message.textContent = "Masukkan nomor terlebih dahulu.";
-        return;
-      }
-
-      if (!/^\+?[0-9]{8,15}$/.test(phone)) {
-        message.textContent = "Format nomor tidak valid.";
-        return;
-      }
-
-      message.textContent = "Menyimpan nomor...";
-
-      const { error } = await db
-        .from("whitelist_numbers")
-        .insert([{ phone }]);
-
-      if (error) {
-        message.textContent =
-          error.code === "23505"
-            ? "Nomor sudah terdaftar."
-            : "Gagal menyimpan: " + error.message;
-        return;
-      }
-
-      phoneInput.value = "";
-      message.textContent = "Nomor berhasil ditambahkan.";
-
-      await loadNumbers();
-    }
-
-    // TAMPILKAN DAN CARI NOMOR
-    function renderNumbers() {
-      const list = document.getElementById("numberList");
-      const search = document.getElementById("search").value
-        .trim()
-        .toLowerCase();
-
-      const filtered = numbers.filter(item =>
-        item.phone.toLowerCase().includes(search)
-      );
-
-      list.innerHTML = "";
-
-      if (filtered.length === 0) {
-        list.innerHTML =
-          '<p class="muted">Nomor tidak ditemukan.</p>';
-        return;
-      }
-
-      filtered.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "number-item";
-
-        const phone = document.createElement("span");
-        phone.textContent = item.phone;
-
-        const button = document.createElement("button");
-        button.className = "delete";
-        button.textContent = "Hapus";
-        button.onclick = () => deleteNumber(item.id);
-
-        div.appendChild(phone);
-        div.appendChild(button);
-        list.appendChild(div);
-      });
-    }
-
-    // HAPUS NOMOR
-    async function deleteNumber(id) {
-      const confirmDelete = confirm(
-        "Yakin ingin menghapus nomor ini?"
-      );
-
-      if (!confirmDelete) return;
-
-      const { error } = await db
-        .from("whitelist_numbers")
-        .delete()
-        .eq("id", id);
-
-      if (error) {
-        alert("Gagal menghapus: " + error.message);
-        return;
-      }
-
-      await loadNumbers();
-    }
-
-    // CEK SESI LOGIN SAAT HALAMAN DIBUKA
-    async function checkSession() {
-      const { data } = await db.auth.getSession();
-
-      if (data.session) {
-        showDashboard();
-      }
-    }
-
-    checkSession();
-  </script>
 </body>
 </html>
