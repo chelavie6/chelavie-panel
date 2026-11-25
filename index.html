@@ -2,220 +2,318 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Database Chelavie</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Database Chelavie</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    body {
-      margin: 0;
-      padding: 20px;
-      background: #ffffff;
-      color: #292929;
-      font-family: Arial, sans-serif;
-    }
+body {
+  margin: 0;
+  padding: 20px;
+  background: #ffffff;
+  color: #292929;
+  font-family: Arial, sans-serif;
+}
 
-    .container {
-      max-width: 750px;
-      margin: 35px auto;
-    }
+.container {
+  max-width: 750px;
+  margin: 35px auto;
+}
 
-    h1 {
-      color: #d93652;
-      text-align: center;
-      margin-bottom: 8px;
-      font-size: 28px;
-    }
+h1 {
+  color: #d93652;
+  text-align: center;
+  margin-bottom: 8px;
+  font-size: 28px;
+}
 
-    .subtitle {
-      text-align: center;
-      color: #888;
-      margin-bottom: 25px;
-    }
+.subtitle {
+  text-align: center;
+  color: #888;
+  margin-bottom: 25px;
+}
 
-    .card {
-      background: #fff;
-      border: 1px solid #eee;
-      border-radius: 16px;
-      padding: 22px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-    }
+.card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
 
-    h2 {
-      font-size: 18px;
-      margin-top: 0;
-    }
+h2 {
+  font-size: 18px;
+  margin-top: 0;
+}
 
-    input {
-      width: 100%;
-      padding: 13px;
-      margin: 8px 0 14px;
-      border: 1px solid #ddd;
-      border-radius: 9px;
-      font-size: 15px;
-      outline: none;
-    }
+input {
+  width: 100%;
+  padding: 13px;
+  margin: 8px 0 14px;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+  font-size: 15px;
+  outline: none;
+}
 
-    input:focus {
-      border-color: #d93652;
-    }
+input:focus {
+  border-color: #d93652;
+}
 
-    button {
-      border: none;
-      background: #d93652;
-      color: white;
-      padding: 12px 18px;
-      border-radius: 9px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+button {
+  border: none;
+  background: #d93652;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: bold;
+}
 
-    button:hover {
-      background: #bd2943;
-    }
+button:hover {
+  background: #bd2943;
+}
 
-    .secondary {
-      background: #555;
-    }
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
-    .delete {
-      background: #e74c3c;
-      padding: 8px 12px;
-    }
+.secondary {
+  background: #555;
+}
 
-    .stats-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
+.delete {
+  background: #e74c3c;
+  padding: 8px 12px;
+}
 
-    .stats {
-      background: #fff5f6;
-      border: 1px solid #f5d4da;
-      padding: 20px 14px;
-      border-radius: 14px;
-      text-align: center;
-    }
+/* LOGIN */
 
-    .stats-title {
-      color: #777;
-      font-size: 13px;
-      margin-bottom: 10px;
-    }
+.login-wrapper {
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .stats-number {
-      display: block;
-      font-size: 30px;
-      font-weight: bold;
-      color: #d93652;
-    }
+.login-box {
+  width: 100%;
+  max-width: 380px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  border-radius: 20px;
+  padding: 30px 25px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+}
 
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      color: #16834a;
-      background: #e9f8ef;
-      padding: 8px 13px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: bold;
-    }
+.lock-icon {
+  width: 75px;
+  height: 75px;
+  background: #fff0f2;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  color: #d93652;
+}
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background: #20b765;
-      border-radius: 50%;
-    }
+.login-title {
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #292929;
+  margin-bottom: 8px;
+}
 
-    .number-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid #eee;
-      padding: 13px 0;
-      overflow-wrap: anywhere;
-    }
+.login-description {
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 25px;
+}
 
-    .number-item:last-child {
-      border-bottom: none;
-    }
+.login-box input {
+  width: 100%;
+  margin: 0 0 15px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 5px;
+}
 
-    .hidden {
-      display: none;
-    }
+.login-button {
+  width: 100%;
+  padding: 14px;
+  background: #d93652;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
 
-    .message {
-      margin-top: 12px;
-      font-size: 14px;
-      color: #d93652;
-    }
+/* DASHBOARD */
 
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+.stats-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
 
-    .muted {
-      color: #888;
-      font-size: 13px;
-    }
+.stats {
+  background: #fff5f6;
+  border: 1px solid #f5d4da;
+  padding: 20px 14px;
+  border-radius: 14px;
+  text-align: center;
+}
 
-    @media (max-width: 400px) {
-      .stats {
-        padding: 16px 8px;
-      }
+.stats-title {
+  color: #777;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
 
-      .stats-number {
-        font-size: 25px;
-      }
-    }
-  </style>
+.stats-number {
+  display: block;
+  font-size: 30px;
+  font-weight: bold;
+  color: #d93652;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #16834a;
+  background: #e9f8ef;
+  padding: 8px 13px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: #20b765;
+  border-radius: 50%;
+}
+
+.number-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #eee;
+  padding: 13px 0;
+  overflow-wrap: anywhere;
+}
+
+.number-item:last-child {
+  border-bottom: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.message {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #d93652;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.muted {
+  color: #888;
+  font-size: 13px;
+}
+
+@media (max-width: 400px) {
+  .stats {
+    padding: 16px 8px;
+  }
+
+  .stats-number {
+    font-size: 25px;
+  }
+}
+</style>
 </head>
 
 <body>
 
 <div class="container">
 
-  <h1>Database Chelavie</h1>
-  <p class="subtitle">WhatsApp Number Database</p>
-
   <!-- LOGIN -->
-  <div class="card" id="loginCard">
-    <h2>Login Admin</h2>
+  <div class="login-wrapper" id="loginCard">
 
-    <input
-      type="email"
-      id="email"
-      placeholder="Email admin"
-    >
+    <div class="login-box">
 
-    <input
-      type="password"
-      id="password"
-      placeholder="Password"
-    >
+      <div class="lock-icon">
+        <svg width="42" height="42" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round"
+          stroke-linejoin="round">
+          <rect x="4" y="10" width="16" height="11" rx="2"/>
+          <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+          <circle cx="12" cy="15" r="1"/>
+          <path d="M12 16v2"/>
+        </svg>
+      </div>
 
-    <button onclick="login()">Login</button>
+      <div class="login-title">ACCESS CONTROL</div>
 
-    <p class="message" id="loginMessage"></p>
+      <div class="login-description">
+        Masukkan password!
+      </div>
+
+      <input
+        type="password"
+        id="password"
+        placeholder="••••••••••"
+        autocomplete="current-password"
+      >
+
+      <button
+        class="login-button"
+        id="loginButton"
+        onclick="login()">
+        LOGIN
+      </button>
+
+      <p class="message" id="loginMessage"></p>
+
+    </div>
   </div>
 
   <!-- DASHBOARD -->
   <div id="dashboard" class="hidden">
+
+    <h1>Database Chelavie</h1>
+    <p class="subtitle">WhatsApp Number Database</p>
 
     <!-- STATISTIK -->
     <div class="stats-container">
@@ -242,6 +340,7 @@
 
     <!-- TAMBAH NOMOR -->
     <div class="card">
+
       <h2>Tambah Nomor</h2>
 
       <input
@@ -250,13 +349,17 @@
         placeholder="Contoh: 628123456789"
       >
 
-      <button onclick="addNumber()">Tambah Nomor</button>
+      <button id="addButton" onclick="addNumber()">
+        Tambah Nomor
+      </button>
 
       <p class="message" id="addMessage"></p>
+
     </div>
 
     <!-- DAFTAR NOMOR -->
     <div class="card">
+
       <h2>Daftar Whitelist</h2>
 
       <input
@@ -267,195 +370,318 @@
       >
 
       <div id="numberList"></div>
+
       <p class="muted" id="listMessage"></p>
+
     </div>
 
   </div>
+
 </div>
 
 <script>
-  // SUPABASE
-  const SUPABASE_URL =
-    "https://djouuqmfqgazvvhbmwda.supabase.co";
 
-  const SUPABASE_KEY =
-    "sb_publishable_lcIlTOGg38UiWqCmLPW7Ig_HpgQJD_d";
+// =========================
+// KONEKSI SUPABASE
+// =========================
 
-  const db = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+const SUPABASE_URL =
+  "https://djouuqmfqgazvvhbmwda.supabase.co";
 
-  let numbers = [];
+const SUPABASE_KEY =
+  "sb_publishable_lcIlTOGg38UiWqCmLPW7Ig_HpgQJD_d";
 
-  // LOGIN
-  async function login() {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const message = document.getElementById("loginMessage");
+const ADMIN_EMAIL = "admin@chelavie.com";
 
-    message.textContent = "Memproses login...";
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let numbers = [];
+
+// =========================
+// LOGIN
+// =========================
+
+async function login() {
+
+  const password =
+    document.getElementById("password").value;
+
+  const message =
+    document.getElementById("loginMessage");
+
+  const button =
+    document.getElementById("loginButton");
+
+  if (!password) {
+    message.textContent =
+      "Masukkan password terlebih dahulu.";
+    return;
+  }
+
+  button.disabled = true;
+  message.textContent = "Memproses login...";
+
+  try {
 
     const { error } = await db.auth.signInWithPassword({
-      email,
-      password
+      email: ADMIN_EMAIL,
+      password: password
     });
 
     if (error) {
-      message.textContent = "Login gagal: " + error.message;
+      message.textContent =
+        "Login gagal. Periksa password admin.";
       return;
     }
 
-    showDashboard();
-  }
-
-  // DASHBOARD
-  async function showDashboard() {
-    document.getElementById("loginCard").classList.add("hidden");
-    document.getElementById("dashboard").classList.remove("hidden");
-
-    await loadNumbers();
-  }
-
-  // LOGOUT
-  async function logout() {
-    await db.auth.signOut();
-
-    numbers = [];
-
-    document.getElementById("dashboard").classList.add("hidden");
-    document.getElementById("loginCard").classList.remove("hidden");
     document.getElementById("password").value = "";
+
+    await showDashboard();
+
+  } catch (error) {
+
+    message.textContent =
+      "Terjadi kesalahan koneksi.";
+
+  } finally {
+
+    button.disabled = false;
+
+  }
+}
+
+// =========================
+// DASHBOARD
+// =========================
+
+async function showDashboard() {
+
+  document.getElementById("loginCard")
+    .classList.add("hidden");
+
+  document.getElementById("dashboard")
+    .classList.remove("hidden");
+
+  await loadNumbers();
+}
+
+// =========================
+// LOGOUT
+// =========================
+
+async function logout() {
+
+  await db.auth.signOut();
+
+  numbers = [];
+
+  document.getElementById("dashboard")
+    .classList.add("hidden");
+
+  document.getElementById("loginCard")
+    .classList.remove("hidden");
+
+  document.getElementById("password").value = "";
+
+  document.getElementById("loginMessage").textContent = "";
+}
+
+// =========================
+// AMBIL DATA
+// =========================
+
+async function loadNumbers() {
+
+  const listMessage =
+    document.getElementById("listMessage");
+
+  listMessage.textContent = "Memuat data...";
+
+  const { data, error } = await db
+    .from("whitelist_numbers")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+
+    listMessage.textContent =
+      "Gagal mengambil data: " + error.message;
+
+    return;
   }
 
-  // AMBIL DATA
-  async function loadNumbers() {
-    const { data, error } = await db
-      .from("whitelist_numbers")
-      .select("*")
-      .order("created_at", { ascending: false });
+  numbers = data || [];
 
-    if (error) {
-      document.getElementById("listMessage").textContent =
-        "Gagal mengambil data: " + error.message;
-      return;
-    }
+  document.getElementById("total").textContent =
+    numbers.length;
 
-    numbers = data || [];
+  renderNumbers();
 
-    document.getElementById("total").textContent =
-      numbers.length;
+  listMessage.textContent = "";
+}
 
-    renderNumbers();
+// =========================
+// TAMBAH NOMOR
+// =========================
+
+async function addNumber() {
+
+  const phoneInput =
+    document.getElementById("phone");
+
+  const message =
+    document.getElementById("addMessage");
+
+  const button =
+    document.getElementById("addButton");
+
+  const phone = phoneInput.value.trim();
+
+  if (!phone) {
+    message.textContent =
+      "Masukkan nomor terlebih dahulu.";
+    return;
   }
 
-  // TAMBAH NOMOR
-  async function addNumber() {
-    const phoneInput = document.getElementById("phone");
-    const message = document.getElementById("addMessage");
+  if (!/^\+?[0-9]{8,15}$/.test(phone)) {
+    message.textContent =
+      "Format nomor tidak valid.";
+    return;
+  }
 
-    const phone = phoneInput.value.trim();
+  button.disabled = true;
+  message.textContent = "Menyimpan nomor...";
 
-    if (!phone) {
-      message.textContent = "Masukkan nomor terlebih dahulu.";
-      return;
-    }
-
-    if (!/^\+?[0-9]{8,15}$/.test(phone)) {
-      message.textContent = "Format nomor tidak valid.";
-      return;
-    }
-
-    message.textContent = "Menyimpan nomor...";
+  try {
 
     const { error } = await db
       .from("whitelist_numbers")
       .insert([{ phone }]);
 
     if (error) {
+
       message.textContent =
         error.code === "23505"
           ? "Nomor sudah terdaftar."
           : "Gagal menyimpan: " + error.message;
+
       return;
     }
 
     phoneInput.value = "";
-    message.textContent = "Nomor berhasil ditambahkan.";
+
+    message.textContent =
+      "Nomor berhasil ditambahkan.";
 
     await loadNumbers();
+
+  } catch (error) {
+
+    message.textContent =
+      "Terjadi kesalahan koneksi.";
+
+  } finally {
+
+    button.disabled = false;
+
   }
+}
 
-  // TAMPILKAN NOMOR
-  function renderNumbers() {
-    const list = document.getElementById("numberList");
+// =========================
+// CARI DAN TAMPILKAN NOMOR
+// =========================
 
-    const search = document.getElementById("search").value
+function renderNumbers() {
+
+  const list =
+    document.getElementById("numberList");
+
+  const search =
+    document.getElementById("search").value
       .trim()
       .toLowerCase();
 
-    const filtered = numbers.filter(item =>
-      item.phone.toLowerCase().includes(search)
-    );
+  const filtered = numbers.filter(item =>
+    item.phone.toLowerCase().includes(search)
+  );
 
-    list.innerHTML = "";
+  list.innerHTML = "";
 
-    if (filtered.length === 0) {
-      list.innerHTML =
-        '<p class="muted">Nomor tidak ditemukan.</p>';
-      return;
-    }
+  if (filtered.length === 0) {
 
-    filtered.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "number-item";
+    list.innerHTML =
+      '<p class="muted">Nomor tidak ditemukan.</p>';
 
-      const phone = document.createElement("span");
-      phone.textContent = item.phone;
-
-      const button = document.createElement("button");
-      button.className = "delete";
-      button.textContent = "Hapus";
-      button.onclick = () => deleteNumber(item.id);
-
-      div.appendChild(phone);
-      div.appendChild(button);
-
-      list.appendChild(div);
-    });
+    return;
   }
 
-  // HAPUS NOMOR
-  async function deleteNumber(id) {
-    const confirmDelete = confirm(
-      "Yakin ingin menghapus nomor ini?"
-    );
+  filtered.forEach(item => {
 
-    if (!confirmDelete) return;
+    const div = document.createElement("div");
+    div.className = "number-item";
 
-    const { error } = await db
-      .from("whitelist_numbers")
-      .delete()
-      .eq("id", id);
+    const phone = document.createElement("span");
+    phone.textContent = item.phone;
 
-    if (error) {
-      alert("Gagal menghapus: " + error.message);
-      return;
-    }
+    const button = document.createElement("button");
+    button.className = "delete";
+    button.textContent = "Hapus";
 
-    await loadNumbers();
+    button.onclick = () => deleteNumber(item.id);
+
+    div.appendChild(phone);
+    div.appendChild(button);
+
+    list.appendChild(div);
+
+  });
+}
+
+// =========================
+// HAPUS NOMOR
+// =========================
+
+async function deleteNumber(id) {
+
+  const confirmDelete = confirm(
+    "Yakin ingin menghapus nomor ini?"
+  );
+
+  if (!confirmDelete) return;
+
+  const { error } = await db
+    .from("whitelist_numbers")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+
+    alert("Gagal menghapus: " + error.message);
+
+    return;
   }
 
-  // CEK LOGIN
-  async function checkSession() {
-    const { data } = await db.auth.getSession();
+  await loadNumbers();
+}
 
-    if (data.session) {
-      showDashboard();
-    }
+// =========================
+// CEK SESI LOGIN
+// =========================
+
+async function checkSession() {
+
+  const { data, error } = await db.auth.getSession();
+
+  if (!error && data.session) {
+    await showDashboard();
   }
+}
 
-  checkSession();
+checkSession();
+
 </script>
 
 </body>
